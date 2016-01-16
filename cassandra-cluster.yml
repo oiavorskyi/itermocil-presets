@@ -1,0 +1,27 @@
+windows:
+  - name: cassandra
+    root: ~/dev/cassandra-cluster/
+    layout: main-vertical
+    panes:
+      - commands:
+        - itermtitle cassandra - node 1
+        - cd node1
+        - clear
+        - bin/cqlsh -e "desc keyspaces;" 127.0.0.1 >& /dev/null || bin/cassandra > /dev/null
+      - commands:
+        - itermtitle cassandra - node 2
+        - cd node2
+        - sudo ifconfig lo0 alias 127.0.0.2 255.0.0.0
+        - clear
+        - bin/cqlsh -e "desc keyspaces;" 127.0.0.2 >& /dev/null || bin/cassandra > /dev/null
+      - commands:
+        - itermtitle cassandra - node 3
+        - cd node3
+        - sudo ifconfig lo0 alias 127.0.0.3 255.0.0.0
+        - clear
+        - bin/cqlsh -e "desc keyspaces;" 127.0.0.3 >& /dev/null || bin/cassandra > /dev/null
+  - name: cassandra-logs
+    root: ~/dev/cassandra-cluster
+    layout: tiled
+    panes:
+      - multitail -f node1/logs/system.log node2/logs/system.log node3/logs/system.log
